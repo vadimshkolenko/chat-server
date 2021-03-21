@@ -1,4 +1,12 @@
 const Koa = require('koa');
+const Router = require('koa-router');
+const dotenv = require('dotenv')
+const { v4: uuid } = require('uuid');
+const Session = require('./models/Session');
+const handleMongooseValidationError = require('./middleware/validationErrors');
+const {register, confirm} = require('./controllers/registration');
+
+dotenv.config({path: '.env'})
 
 const app = new Koa();
 
@@ -18,9 +26,22 @@ app.use(async (ctx, next) => {
   }
 })
 
-app.use(async (ctx, next) => {
-  console.log(ctx.request.body);
-  ctx.body = {data: 'test'};
-})
+app.use((ctx, next) => {
+  ctx.login = async function(user) {
+    const token = uuid();
+    await Session.create({token, user, lastVisit: new Date()});
+
+    return token;
+  };
+
+  return next();
+});
+
+const router = new Router({prefix: '/api'})
+
+router.post('/register', handleMongooseValidationError, register)
+router.post('/confirm', handleMongooseValidationError, confirm)
+
+app.use(router.routes())
 
 module.exports = app;
