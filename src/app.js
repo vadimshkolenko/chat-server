@@ -1,5 +1,6 @@
 const Koa = require('koa');
 const Router = require('koa-router');
+const cors = require('@koa/cors');
 const dotenv = require('dotenv')
 const { v4: uuid } = require('uuid');
 const Session = require('./models/Session');
@@ -10,6 +11,7 @@ dotenv.config({path: '.env'})
 
 const app = new Koa();
 
+app.use(cors());
 app.use(require('koa-bodyparser')());
 
 app.use(async (ctx, next) => {
