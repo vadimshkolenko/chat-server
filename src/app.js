@@ -6,6 +6,7 @@ const { v4: uuid } = require('uuid');
 const Session = require('./models/Session');
 const handleMongooseValidationError = require('./middleware/validationErrors');
 const {register, confirm} = require('./controllers/registration');
+const {login} = require('./controllers/login');
 
 dotenv.config({path: '.env'})
 
@@ -43,6 +44,7 @@ const router = new Router({prefix: '/api'})
 
 router.post('/register', handleMongooseValidationError, register)
 router.post('/confirm', handleMongooseValidationError, confirm)
+router.post('/login', handleMongooseValidationError, login);
 
 app.use(router.routes())
 
