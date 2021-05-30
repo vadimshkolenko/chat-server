@@ -29,7 +29,7 @@ module.exports.confirm = async (ctx) => {
   if (user) {
     const token = await ctx.login(user)
 
-    ctx.body = {token}
+    ctx.body = {token, id: user._id};
   } else {
     ctx.status = 400;
     ctx.body = {error: 'Ссылка подтверждения недействительна или устарела'};

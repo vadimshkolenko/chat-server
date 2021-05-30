@@ -11,8 +11,8 @@ module.exports.login = async (ctx, next) => {
       return;
     }
 
-    const token = uuid();
+    const token = await ctx.login(user);
 
-    ctx.body = {token};
+    ctx.body = {token, id: user._id};
   })(ctx, next);
 };
