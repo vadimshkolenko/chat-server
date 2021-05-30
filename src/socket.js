@@ -1,4 +1,5 @@
 const socketIO = require('socket.io');
+const {v4: uuid} = require('uuid');
 
 const Session = require('../src/models/Session');
 
@@ -52,6 +53,7 @@ const socket = server => {
       socket.to(to).to(from).emit('private_message', {
         content,
         from,
+        id: uuid()
       });
     })
 
